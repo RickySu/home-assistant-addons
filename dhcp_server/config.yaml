@@ -1,10 +1,9 @@
 ---
-version: 1.5.0
+version: 1.5.1
 slug: dhcp_server
 name: "DHCP server [deprecated]"
 description: A simple DHCP server
-url: https://home-assistant.io/addons/dhcp_server/
-codenotary: notary@home-assistant.io
+url: https://github.com/RickySu/home-assistant-addons/tree/master/dhcp_server
 advanced: true
 arch:
   - armhf
@@ -13,7 +12,7 @@ arch:
   - amd64
   - i386
 host_network: true
-image: homeassistant/{arch}-addon-dhcp_server
+#image: homeassistant/{arch}-addon-dhcp_server
 options:
   default_lease: 86400
   dns:
