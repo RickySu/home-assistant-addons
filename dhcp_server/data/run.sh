@@ -90,6 +90,12 @@ fi
 
 # Start DHCP server
 bashio::log.info "Starting DHCP server..."
+
+while true
+do
+  sleep 3600
+done
+exit  
 exec /usr/sbin/dhcpd \
     -4 -f -d --no-pid \
     -lf "${LEASES}" \
