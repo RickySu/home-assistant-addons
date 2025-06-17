@@ -50,7 +50,9 @@ for network in $(bashio::config 'networks|keys'); do
 
     {
         echo "subnet ${SUBNET} netmask ${NETMASK} {"
-        echo "  interface ${INTERFACE};"
+        if [ "$INTERFACE" ]; then
+          echo "  interface ${INTERFACE};"
+        fi
         echo "  range ${RANGE_START} ${RANGE_END};"
         echo "  option routers ${GATEWAY};"
         echo "  option broadcast-address ${BROADCAST};"

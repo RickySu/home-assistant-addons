@@ -42,13 +42,13 @@ schema:
       mac: str
       name: str
       dns: 
-        - str
-      gateway: str
+        - "str?"
+      gateway: "str?"
   max_lease: int
   networks:
     - broadcast: str
       gateway: str
-      interface: str
+      interface: "str?"
       netmask: str
       range_end: str
       range_start: str

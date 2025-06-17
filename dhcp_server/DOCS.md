@@ -112,7 +112,7 @@ IP addresses are `192.168.1.x`, the broadcast address is usually `192.168.1.255`
 Sets the gateway address for that the DHCP server hands out to its clients.
 This is usually the IP address of your router.
 
-#### Option: `networks.interface`
+#### Option: `networks.interface` (optional)
 
 The network interface to listen to for this network, e.g., `end0`.
 
