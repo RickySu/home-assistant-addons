@@ -63,12 +63,15 @@ for host in $(bashio::config 'hosts|keys'); do
     IP=$(bashio::config "hosts[${host}].ip")
     MAC=$(bashio::config "hosts[${host}].mac")
     NAME=$(bashio::config "hosts[${host}].name")
+#    GATEWAY=$(bashio::config "hosts[${host}].gateway")
 
     {
         echo "host ${NAME} {"
         echo "  hardware ethernet ${MAC};"
         echo "  fixed-address ${IP};"
         echo "  option host-name \"${NAME}\";"
+#        if [ "$GATEWAY" ]; then
+#        fi
         echo "}"
     } >> "${CONFIG}"
 done
@@ -80,6 +83,11 @@ fi
 
 # Start DHCP server
 bashio::log.info "Starting DHCP server..."
+while true
+do
+  sleep 3600
+done
+exit
 exec /usr/sbin/dhcpd \
     -4 -f -d --no-pid \
     -lf "${LEASES}" \

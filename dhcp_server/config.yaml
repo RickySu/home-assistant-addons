@@ -42,6 +42,9 @@ schema:
     - ip: str
       mac: str
       name: str
+      dns: 
+        - str
+      gateway: str
   max_lease: int
   networks:
     - broadcast: str
