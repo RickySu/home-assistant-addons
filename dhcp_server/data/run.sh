@@ -50,7 +50,7 @@ for network in $(bashio::config 'networks|keys'); do
 
     {
         echo "subnet ${SUBNET} netmask ${NETMASK} {"
-        if [ "$INTERFACE" ]; then
+        if [ -n "$INTERFACE" ] && [ "$INTERFACE" != "null" ]; then
           echo "  interface ${INTERFACE};"
         fi
         echo "  range ${RANGE_START} ${RANGE_END};"
@@ -77,7 +77,9 @@ for host in $(bashio::config 'hosts|keys'); do
         fi
         if [ "$(bashio::config 'hosts['$host'].dns')" ]; then
           DNS=$(bashio::config 'hosts['$host'].dns|join(", ")')
-          echo "  option domain-name-servers ${DNS};"
+          if [ -n "$DNS" ]; then
+            echo "  option domain-name-servers ${DNS};"
+          fi
         fi
         echo "}"
     } >> "${CONFIG}"
@@ -91,11 +93,6 @@ fi
 # Start DHCP server
 bashio::log.info "Starting DHCP server..."
 
-while true
-do
-  sleep 3600
-done
-exit  
 exec /usr/sbin/dhcpd \
     -4 -f -d --no-pid \
     -lf "${LEASES}" \
