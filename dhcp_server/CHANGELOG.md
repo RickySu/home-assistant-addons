@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.1
+
+**Deprecation notice**
+This will be the final update for this add-on. The maintenance of the ISC DHCP
+Server ended in 2022 already.
+
+- add route and dns config for eatch host
+
 ## 1.5.0
 
 **Deprecation notice**

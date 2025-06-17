@@ -43,6 +43,10 @@ hosts:
   - name: webcam_xy
     mac: aa:bb:ee:cc
     ip: 192.168.1.40
+    gateway: 192.168.1.1
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 ```
 
 ### Option: `domain` (required)
@@ -131,6 +135,17 @@ The MAC address of the client device.
 #### Option: `hosts.ip`
 
 The IP address you want the DHCP server to assign.
+
+#### Option: `hosts.gateway` (optional)
+
+Sets the gateway address for that the DHCP server hands out to its clients.
+This is usually the IP address of your router.
+
+#### Option: `hosts.dns` (optional)
+
+The DNS servers your DHCP server gives to your clients. This option can
+contain a list of servers. By default, it is configured to have Google's
+public DNS servers: `"8.8.8.8", "8.8.4.4".
 
 ## Support
 
