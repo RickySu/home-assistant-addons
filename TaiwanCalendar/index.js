@@ -42,6 +42,7 @@ const convertTaiwanCalendar = (year, rawData) => {
   calendar = {}
   rawData.forEach((element) => {
     calendar[element.date] = {
+      date: element.date,
       isHoliday: element.isHoliday,
       weekDay: element.week,
       description: element.description
