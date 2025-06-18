@@ -21,7 +21,7 @@ const handleServer = () => {
   })
 
   app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(new Date(), `calendar app listening on port ${port}`)
   })
 }
 
@@ -92,6 +92,7 @@ const fetchPinYiTaiwanCalendar = async (year) => {
 }
 
 const fetchAllCalendar = async (year) => {
+  console.log(new Date(), `sync calendar ${year}`)
   await fetchTaiwanCalendar(year)
   if(calendar) {
     return
@@ -101,5 +102,8 @@ const fetchAllCalendar = async (year) => {
 
 (async () => {
   await fetchAllCalendar((new Date()).getFullYear())
+  setInterval(() => {
+    fetchAllCalendar((new Date()).getFullYear())
+  }, 86400000)
   handleServer()
 })()
