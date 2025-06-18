@@ -1,0 +1,22 @@
+---
+version: 0.0.1
+slug: taiwan_calendar
+name: "Taiwan Calendar"
+description: A Taiwan Calendar REST API Service
+url: https://github.com/RickySu/home-assistant-addons/tree/master/TaiwanCalendar
+advanced: true
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+host_network: true
+
+options:
+  port:  9999
+  cache_base:    '/share'
+schema:
+  port:  int
+  cache_base:    "str?"
+startup: system
+init: false

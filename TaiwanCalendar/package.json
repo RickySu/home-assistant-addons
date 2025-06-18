@@ -1,0 +1,16 @@
+{
+  "name": "taiwan_calendar",
+  "version": "1.0.0",
+  "description": "Taiwan Calendar",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "serve": "node index.js"
+  },
+  "author": "",
+  "license": "https://data.gov.tw/license",
+  "dependencies": {
+    "express": "^5.1.0",
+    "yargs": "^18.0.0"
+  }
+}

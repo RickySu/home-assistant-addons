@@ -1,0 +1,8 @@
+---
+configuration:
+  port:
+    name: API Service Listen Port
+    description: The REST API server listen port
+  cache_base:
+    name: Calendar Cache Folder
+    description: Calendar Cache Folder.
