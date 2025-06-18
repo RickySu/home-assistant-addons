@@ -12,11 +12,17 @@ arch:
   - amd64
 host_network: true
 
+map:
+  - type: share
+    read_only: False
+
 options:
   port:  9999
   cache_base:    '/share'
+
 schema:
   port:  int
   cache_base:    "str?"
+
 startup: system
 init: false
