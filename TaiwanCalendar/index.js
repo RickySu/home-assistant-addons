@@ -12,6 +12,18 @@ let calendar = null
 
 const handleServer = () => {
   const app = express()
+
+  app.get('/calendar/', async (req, res) => {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month =  String(date.getMonth() + 1).padStart(2, '0')
+    const day =  String(date.getDate() + 1).padStart(2, '0')
+    if(calendarYear != year) {
+      await fetchAllCalendar(year)
+    }
+    res.json(calendar[`${year}${month}${day}`])
+  })
+
   app.get('/calendar/:year/:month/:day', async (req, res) => {
     let {year, month, day} = req.params
     if(calendarYear != year) {
@@ -63,6 +75,7 @@ const convertPinYiTaiwanCalendar = (year, rawData) => {
   calendar = {}
   rawData.forEach((element) => {
     calendar[element.date] = {
+      date: element.date,
       isHoliday: element.isHoliday,
       weekDay: element.week_chinese,
       description: element.caption
