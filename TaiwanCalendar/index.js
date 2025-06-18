@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fs from 'node:fs/promises'
 import express from 'express'
 import yargs from 'yargs'
@@ -16,7 +17,7 @@ const handleServer = () => {
     if(calendarYear != year) {
       await fetchAllCalendar(year)
     }
-    res.json(calendar[`${year}${month}${day}`]).send()
+    res.json(calendar[`${year}${month}${day}`])
   })
 
   app.listen(port, () => {
