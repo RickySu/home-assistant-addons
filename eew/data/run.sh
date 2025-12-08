@@ -11,6 +11,9 @@ export COUNTDOWN_DELAY=$(bashio::config 'countdown_delay')
 export PLAY_DELAY=$(bashio::config 'play_delay')
 export AUDIO_SOURCE=$(bashio::config 'audio_source')
 export AUDIO_TARGET=$(bashio::config 'audio_target')
+export NOTIFY_MQTT_URL=$(bashio::config 'notify_url')
+export NOTIFY_MQTT_USERNAME=$(bashio::config 'notify_username')
+export NOTIFY_MQTT_PASSWORD=$(bashio::config 'notify_password')
 
 cd /script
 node ./index.js
