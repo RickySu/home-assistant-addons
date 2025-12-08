@@ -4,6 +4,7 @@ import config from '../config/config.js'
 import EEWCalculator from './eewCalculator.js'
 import log from '../log/logger.js'
 import mqtt from "mqtt";
+import gen from '../lib/gen.js';
 import fs from 'fs/promises';
 
 const notify = async (intensity, waveTime) => {
@@ -33,12 +34,13 @@ const notify = async (intensity, waveTime) => {
 export default () => {
   let dstLocation = region[config.region.city][config.region.district]
   const calculator = new EEWCalculator()
-  bus.on('warning/cwb', (cwbNotify) => {
+  bus.on('warning/cwb', async (cwbNotify) => {
     const distance = calculator.distance(cwbNotify.epicenterLat, cwbNotify.epicenterLon, dstLocation.lat, dstLocation.lon)
     const intensity = calculator.intensityToNumberString(calculator.intensity([cwbNotify.epicenterLat, cwbNotify.epicenterLon], [dstLocation.lat, dstLocation.lon], cwbNotify.depth, cwbNotify.magnitude))
     const waveTime = calculator.calculateWaveTime(cwbNotify.depth, distance)
     log({ label: 'warning/cwb', message: `distance: ${distance}, intensity: ${intensity}, waveTime: ${JSON.stringify(waveTime)}` })
-    notify(intensity, waveTime.s)
+    await gen(intensity, waveTime.s)
+    await notify(intensity, waveTime.s)
   })
 }
 

@@ -27,7 +27,7 @@ function execShellCommand(command) {
  * @param {string} intensity - 強度字串，例如 "5+" 或 "4-", "5"。
  * @returns {Promise<string>} FFmpeg 命令執行的結果。
  */
-export async function generateEarthquakeAudio(seconds, intensity) {
+export async function generateEarthquakeAudio(intensity, seconds) {
   // 原始 Python 程式碼中的設定
   let audioSource = config.audio.source;
   let audioTarget = config.audio.target;
