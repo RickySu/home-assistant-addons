@@ -9,7 +9,7 @@ RUN mkdir /script
 # Copy data
 COPY data/run.sh /
 COPY index.js /script
-COPY src /script
+COPY src /script/src
 COPY package.json /script
 COPY package-lock.json /script
 
