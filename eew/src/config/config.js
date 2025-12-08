@@ -17,6 +17,11 @@ const config = {
   delay: {
     countdown: parseInt(process.env.COUNTDOWN_DELAY),
     play: parseInt(process.env.PLAY_DELAY),
+  },
+  notify: {
+    url: process.env.NOTIFY_MQTT_URL,
+    username: process.env.NOTIFY_MQTT_USERNAME,
+    password: process.env.NOTIFY_MQTT_PASSWORD,
   }
 }
 
