@@ -25,8 +25,8 @@ schema:
   audio_target: str
   countdown_delay: int
   play_delay: int
-  notify_url: string
-  notify_username: string
-  notify_password: string
+  notify_url: str
+  notify_username: str
+  notify_password: str
 startup: system
 init: false
