@@ -15,6 +15,8 @@ COPY package-lock.json /script
 
 RUN  cd /script && \
      npm install && \
-     chmod 755 index.js
+     chmod 755 index.js && \
+     apk update && \
+     apk add ffmpeg
 
 CMD [ "/run.sh" ]

@@ -12,6 +12,5 @@ export PLAY_DELAY=$(bashio::config 'play_delay')
 export AUDIO_SOURCE=$(bashio::config 'audio_source')
 export AUDIO_TARGET=$(bashio::config 'audio_target')
 
-mkdir -p "$CACHE_BASE"
 cd /script
 node ./index.js
