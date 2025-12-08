@@ -21,7 +21,7 @@ const notify = async (intensity, waveTime) => {
     level: intensity,
     sec: waveTime
   }))
-  await client.endAsync()
+  client.endAsync()
   setTimeout(async () => {
     try {
       await fs.unlink(config.audio.target)
