@@ -12,7 +12,7 @@ arch:
   - amd64
 
 map:
-  - type: share
+  - type: media
     read_only: False
 
 schema:
