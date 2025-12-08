@@ -43,13 +43,20 @@ const init = () => {
 
   return createLogger({
     transports: [
-      new transports.File({
-        filename: loggerFilePath('info'),
+      new transports.Console({
         level: 'info',
         format: combine(timestamp(), logFormat)
-      })
+      }),
+      // new transports.File({
+      //   filename: loggerFilePath('info'),
+      //   level: 'info',
+      //   format: combine(timestamp(), logFormat)
+      // })
     ],
-    exceptionHandlers: [new transports.File({ filename: path.join(loggerPath(), 'error.log') })]
+    exceptionHandlers: [
+      new transports.Console(),
+      //new transports.File({ filename: path.join(loggerPath(), 'error.log') })
+    ]
   })
 }
 
