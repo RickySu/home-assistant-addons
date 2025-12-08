@@ -2,7 +2,6 @@ import path from 'path'
 import { createLogger, transports, format } from 'winston'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
-import config from '../config/config.js'
 
 const basePath = () => {
   let __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -27,6 +26,7 @@ const loggerPath = () => {
   const y = new Date().toLocaleDateString('en', { year: 'numeric' })
   const m = new Date().toLocaleDateString('en', { month: '2-digit' })
   return loggerBasePath
+  return path.join(loggerBasePath, y, m)
 }
 
 const loggerFilePath = (prefix = 'info') => {
@@ -37,31 +37,19 @@ const loggerFilePath = (prefix = 'info') => {
 }
 
 const init = () => {
-  let transport = null, exceptionTransport = null;
   fs.mkdirSync(loggerPath(), {
     recursive: true
   })
 
-  if(config.logConsole) {
-    transport = new transports.Console({
-      level: config.logLevel,
-      format: combine(timestamp(), logFormat)
-    })
-    exceptionTransport = new transports.Console()
-  }
-  else {
-    transport = new transports.File({
-      filename: loggerFilePath('info'),
-      level: config.logLevel,
-      format: combine(timestamp(), logFormat)
-    })
-    exceptionTransport = new transports.File({
-      filename: path.join(loggerPath(), 'error.log')
-    })
-  }
   return createLogger({
-    transports: [transport],
-    exceptionHandlers: [exceptionTransport]
+    transports: [
+      new transports.File({
+        filename: loggerFilePath('info'),
+        level: 'info',
+        format: combine(timestamp(), logFormat)
+      })
+    ],
+    exceptionHandlers: [new transports.File({ filename: path.join(loggerPath(), 'error.log') })]
   })
 }
 

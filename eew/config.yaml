@@ -1,0 +1,29 @@
+---
+version: 0.0.1
+slug: eew
+name: "EEW"
+description: EEW
+url: https://github.com/RickySu/home-assistant-addons/tree/master/eew
+advanced: true
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+
+map:
+  - type: share
+    read_only: False
+
+schema:
+  mqtt_user: str
+  mqtt_password: str
+  info_url: str
+  region_city: str
+  region_district: str
+  audio_source: str
+  audio_target: str
+  countdown_delay: int
+  play_delay: int
+startup: system
+init: false

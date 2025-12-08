@@ -9,6 +9,14 @@ const config = {
   region: {
     city:  process.env.REGION_CITY,
     district: process.env.REGION_DISTRICT,
+  },
+  audio: {
+    source: process.env.AUDIO_SOURCE,
+    target: process.env.AUDIO_TARGET,
+  },
+  delay: {
+    countdown: parseInt(process.env.COUNTDOWN_DELAY),
+    play: parseInt(process.env.PLAY_DELAY),
   }
 }
 
