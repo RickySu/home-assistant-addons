@@ -7,6 +7,12 @@ import mqtt from "mqtt";
 import gen from '../lib/gen.js';
 import fs from 'fs/promises';
 
+const dstLocation = region[config.region.city][config.region.district]
+const calculator = new EEWCalculator()
+
+let cdIntensity = 0
+let cdWaveTime = 0
+
 const notify = async (intensity, waveTime) => {
   const url = config.notify.url
   const params = {
@@ -31,17 +37,30 @@ const notify = async (intensity, waveTime) => {
   }, 5000)
 }
 
+const genAndNotify = async (intensity, waveTime) => {
+  const intensityString = calculator.intensityToNumberString(intensity)
+  const nowTime = Date.now() / 1000
+
+  if(nowTime < cdWaveTime && intensity <= cdIntensity) {
+    return
+  }
+
+  cdWaveTime = nowTime + 30
+  cdIntensity = intensity
+
+  await gen(intensityString, waveTime.s)
+  await notify(intensityString, waveTime.s)
+}
+
 export default () => {
-  let dstLocation = region[config.region.city][config.region.district]
-  const calculator = new EEWCalculator()
   bus.on('warning/cwb', async (cwbNotify) => {
     const distance = calculator.distance(cwbNotify.epicenterLat, cwbNotify.epicenterLon, dstLocation.lat, dstLocation.lon)
-    const intensity = calculator.intensityToNumberString(calculator.intensity([cwbNotify.epicenterLat, cwbNotify.epicenterLon], [dstLocation.lat, dstLocation.lon], cwbNotify.depth, cwbNotify.magnitude))
+    const intensity = calculator.intensity([cwbNotify.epicenterLat, cwbNotify.epicenterLon], [dstLocation.lat, dstLocation.lon], cwbNotify.depth, cwbNotify.magnitude)
+    const intensityString = calculator.intensityToNumberString(intensity)
     const waveTime = calculator.calculateWaveTime(cwbNotify.depth, distance)
-    log({ label: 'warning/cwb', message: `distance: ${distance}, intensity: ${intensity}, waveTime: ${JSON.stringify(waveTime)}` })
-    await gen(intensity, waveTime.s)
-    await notify(intensity, waveTime.s)
+    log({ label: 'warning/cwb', message: `distance: ${distance}, intensity: ${intensityString}, waveTime: ${JSON.stringify(waveTime)}` })
+    await genAndNotify(intensity, waveTime.s)
   })
 }
 
-export {notify}
+export {notify, genAndNotify}
