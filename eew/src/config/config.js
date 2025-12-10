@@ -11,8 +11,8 @@ const config = {
     district: process.env.REGION_DISTRICT,
   },
   audio: {
-    source: process.env.AUDIO_SOURCE,
-    target: process.env.AUDIO_TARGET,
+    source: process.env.AUDIO_SOURCE??'/media/eew',
+    target: process.env.AUDIO_TARGET??'/media/earthquake.mp3',
   },
   delay: {
     countdown: parseInt(process.env.COUNTDOWN_DELAY),

@@ -22,8 +22,6 @@ schema:
   info_url: str
   region_city: str
   region_district: str
-  audio_source: str
-  audio_target: str
   countdown_delay: int
   play_delay: int
   notify_url: str
