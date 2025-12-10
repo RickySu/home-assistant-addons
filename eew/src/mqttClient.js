@@ -24,6 +24,8 @@ const handleSubscribe = (client) => {
     qos: 1
   })
 
+  log({ label: 'mqtt', message: 'subscribe report/cwb warning/cwb' })
+
   client.timer = setTimeout(() => {
     clearTimer(client)
     handleSubscribe(client)
@@ -61,6 +63,8 @@ const handleEvent = (client) => {
     log({ label: 'mqtt', message: `${client.keepConnect?.getTime()} topic ${topic}, JSON ${message.toString()}` })
     bus.emit(topic, JSON.parse(message.toString()))
   })
+
+  return
 
   client.on('packetsend', (payload) => {
     log({ label: 'mqtt', message: `${client.keepConnect?.getTime()} packetsend: ${JSON.stringify(payload)}` })
