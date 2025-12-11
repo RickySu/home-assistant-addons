@@ -51,59 +51,54 @@ export async function generateEarthquakeAudio(intensity, seconds) {
   };
 
   let audios = [];
+  let effectiveSeconds = totalSeconds - countDelay - playDelay;
 
   // 1. 強度級別 (e.g., "5.ogg")
-  audios.push(level + ".ogg");
+  audios.push(`${level}.ogg`);
 
   // 2. 強弱程度 (e.g., "intensity-strong.ogg")
   audios.push(intensityDict[strong] || intensityDict[""]); // 確保有預設值
 
-  // 計算實際執行提示音效的秒數
-  let effectiveSeconds = totalSeconds - countDelay - playDelay;
+  audios.push('silent.ogg');
+  effectiveSeconds--;
 
-  if (effectiveSeconds > 0) {
-    // 3. 提示秒數
-    if (effectiveSeconds < 10) {
-      audios.push(String(effectiveSeconds) + ".ogg");
-    } else {
-      // "x" + (seconds % 10) + ".ogg"
-      audios.push("x" + String(effectiveSeconds % 10) + ".ogg");
-    }
-
-    // 4. "second.ogg"
-    audios.push("second.ogg");
-
-    // 決定開始蜂鳴提示的倒數秒數
-    let countdown;
-    if (effectiveSeconds >= 10) {
-      countdown = 10;
-    } else {
-      countdown = effectiveSeconds % 10;
-    }
-
-    // 5. 較長持續時間的 "ding.ogg" 區塊
-    // 原始 Python 邏輯: for i in range(0, seconds - 10)
-    // 這裡的 seconds 應為 effectiveSeconds
-    for (let i = 0; i < effectiveSeconds - 10; i++) {
-      audios.push("ding.ogg");
-    }
-
-    // 6. 倒數計時音效
-    if (countdown === 10) {
-      // Python 邏輯: x0.ogg, silent.ogg
-      audios.push("x0.ogg");
-      audios.push("silent.ogg");
-    }
-
-    // Python 邏輯: for i in range(countdown - 1, 0, -1)
-    for (let i = countdown - 1; i > 0; i--) {
-      audios.push(String(i) + ".ogg");
-      audios.push("silent.ogg");
-    }
+  if(effectiveSeconds >= 20) {
+    audios.push(`${Math.floor(effectiveSeconds / 10)}x.ogg`);
+    audios.push(`x${effectiveSeconds % 10}.ogg`);
+    audios.push('second.ogg');
+    effectiveSeconds -= 2;
+  }
+  else if(effectiveSeconds > 10) {
+    audios.push('silent.ogg');
+    audios.push(`x${effectiveSeconds % 10}.ogg`);
+    audios.push('second.ogg');
+    effectiveSeconds -= 2;
+  }
+  else {
+    audios.push(`${effectiveSeconds}.ogg`);
+    audios.push('second.ogg');
+    effectiveSeconds -= 2;
   }
 
-  // 7. "arrive.ogg"
-  audios.push("arrive.ogg");
+  while(effectiveSeconds > 0) {
+    if((effectiveSeconds % 10) == 0 && effectiveSeconds >= 20) {
+      audios.push(`${Math.floor(effectiveSeconds / 10)}x.ogg`);
+      audios.push(`x${effectiveSeconds % 10}.ogg`);
+      audios.push('silent.ogg');
+      effectiveSeconds -= 1;
+      continue;
+    }
+    if(effectiveSeconds <= 10) {
+      audios.push(`${effectiveSeconds}.ogg`);
+      audios.push('silent.ogg');
+      effectiveSeconds--;
+      continue;
+    }
+    audios.push('ding.ogg');
+    effectiveSeconds--;
+  }
+
+  audios.push('arrive.ogg');
 
   // 8. 最後 5 個 "ding.ogg"
   for (let i = 0; i < 5; i++) {
