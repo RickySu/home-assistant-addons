@@ -48,8 +48,8 @@ const genAndNotify = async (intensity, waveTime) => {
   cdWaveTime = nowTime + 30
   cdIntensity = intensity
 
-  await gen(intensityString, waveTime.s)
-  await notify(intensityString, waveTime.s)
+  await gen(intensityString, waveTime)
+  await notify(intensityString, waveTime)
 }
 
 export default () => {
