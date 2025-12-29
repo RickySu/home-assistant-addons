@@ -160,10 +160,10 @@ class EEWCalculator {
 
   intensityToNumberString(level) {
     switch (level) {
-      case 5: return '5⁻'
-      case 6: return '5⁺'
-      case 7: return '6⁻'
-      case 8: return '6⁺'
+      case 5: return '5-'
+      case 6: return '5+'
+      case 7: return '6-'
+      case 8: return '6+'
       case 9: return '7'
       default: return level.toString()
     }

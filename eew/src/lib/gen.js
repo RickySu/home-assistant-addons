@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import path from 'path';
 import config from '../config/config.js';
+import log from '../log/logger.js';
 
 /**
  * 執行 shell 命令並返回 Promise。
@@ -38,8 +39,8 @@ export async function generateEarthquakeAudio(intensity, seconds) {
   const totalSeconds = parseInt(seconds, 10);
   const intensityStr = String(intensity);
 
-  if (isNaN(totalSeconds) || totalSeconds <= 0) {
-    throw new Error("Seconds 必須是一個大於 0 的數字。");
+  if (isNaN(totalSeconds)) {
+    throw new Error("Seconds 錯誤的時間。");
   }
 
   const level = intensityStr.substring(0, 1); // e.g., "5" from "5+"
@@ -62,6 +63,8 @@ export async function generateEarthquakeAudio(intensity, seconds) {
   audios.push('silent.ogg');
   effectiveSeconds--;
 
+  log({ label: 'gen/audio', message: `intensity: ${intensity}, seconds: ${seconds} audios: ${JSON.stringify(audios)}` })
+
   if(effectiveSeconds >= 20) {
     audios.push(`${Math.floor(effectiveSeconds / 10)}x.ogg`);
     audios.push(`x${effectiveSeconds % 10}.ogg`);
@@ -74,7 +77,7 @@ export async function generateEarthquakeAudio(intensity, seconds) {
     audios.push('second.ogg');
     effectiveSeconds -= 2;
   }
-  else {
+  else if(effectiveSeconds > 0){
     audios.push(`${effectiveSeconds}.ogg`);
     audios.push('second.ogg');
     effectiveSeconds -= 2;
