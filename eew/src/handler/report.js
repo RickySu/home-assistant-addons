@@ -14,7 +14,7 @@ let cdIntensity = 0
 let cdWaveTime = 0
 let lock = 0
 
-const notify = async (intensity, waveTime) => {
+const connectMqtt = async () => {
   const url = config.notify.url
   const params = {
     username: config.notify.username,
@@ -22,13 +22,17 @@ const notify = async (intensity, waveTime) => {
     reconnectPeriod: 0,
     password: config.notify.password
   }
-  const client = mqtt.connect(url, params)
-  console.log('connected', url, params)
+  const client = await mqtt.connectAsync(url, params)
+  log({ label: 'mqtt/connect', message: `mqtt connect: ${url}, ${JSON.stringify(params)}` })
+  return client
+}
+
+const notify = async (intensity, waveTime) => {
+  const client = await connectMqtt()
   await client.publishAsync('warning/earthquake', JSON.stringify({
     level: intensity,
     sec: waveTime
   }))
-  client.endAsync()
   setTimeout(async () => {
     try {
       await fs.unlink(config.audio.target)
@@ -36,6 +40,19 @@ const notify = async (intensity, waveTime) => {
 
     }
   }, 5000)
+  await client.endAsync()
+}
+
+const notifyReport = async (reportDescription) => {
+  const regx = /^(\d+)\/(\d+)-(\d+):(\d+)(.*)/i
+  const match = reportDescription.match(regx)
+  const parsedString = `${match[1]}月${parseInt(match[2])}號${parseInt(match[3])}點${parseInt(match[4])}分${match[5]}`
+  log({ label: 'report/cwb', message: parsedString })
+  const client = await connectMqtt()
+  await client.publishAsync('report/earthquake', JSON.stringify({
+    report: parsedString
+  }))
+  await client.endAsync()
 }
 
 const lockAndWait = (lockTimeout) => {
@@ -90,6 +107,16 @@ export default () => {
     }
     await genAndNotify(intensity, waveTime.s - transmitTime)
   })
+  bus.on('report/cwb', async (cwbNotify) => {
+    const intensity = calculator.intensity([cwbNotify.epicenterLat, cwbNotify.epicenterLon], [dstLocation.lat, dstLocation.lon], cwbNotify.depth, cwbNotify.magnitude)
+    log({ label: 'report/cwb', message: JSON.stringify(cwbNotify) })
+
+    if(intensity < 2) {
+      log({ label: 'report/cwb', message: `ignore` })
+      return
+    }
+    await notifyReport(cwbNotify.description)
+  })
 }
 
-export {notify, genAndNotify}
+export {notifyReport, notify, genAndNotify}
