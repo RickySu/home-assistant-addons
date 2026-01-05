@@ -39,7 +39,7 @@ const handleEvent = (client) => {
   })
 
   client.on('reconnect', () => {
-    log({ label: 'mqtt', message: '${client.keepConnect?.getTime()} reconnect' })
+    log({ label: 'mqtt', message: `${client.keepConnect?.getTime()} reconnect` })
   })
 
   client.on('error', (err) => {
