@@ -46,7 +46,7 @@ const notify = async (intensity, waveTime) => {
 const notifyReport = async (reportDescription) => {
   const regx = /^(\d+)\/(\d+)-(\d+):(\d+)(.*)/i
   const match = reportDescription.match(regx)
-  const parsedString = `${match[1]}月${parseInt(match[2])}號${parseInt(match[3])}點${parseInt(match[4])}分${match[5]}`
+  const parsedString = `${parseInt(match[1])}月${parseInt(match[2])}號${parseInt(match[3])}點${parseInt(match[4])}分${match[5]}`
   log({ label: 'report/cwb', message: parsedString })
   const client = await connectMqtt()
   await client.publishAsync('report/earthquake', JSON.stringify({
@@ -110,6 +110,7 @@ export default () => {
   bus.on('report/cwb', async (cwbNotify) => {
     const intensity = calculator.intensity([cwbNotify.epicenterLat, cwbNotify.epicenterLon], [dstLocation.lat, dstLocation.lon], cwbNotify.depth, cwbNotify.magnitude)
     log({ label: 'report/cwb', message: JSON.stringify(cwbNotify) })
+    log({ label: 'report/cwb', message: `intensity: ${intensity}` })
 
     if(intensity < 2) {
       log({ label: 'report/cwb', message: `ignore` })
