@@ -32,7 +32,7 @@ const notify = async (intensity, waveTime) => {
   await client.publishAsync('warning/earthquake', JSON.stringify({
     level: intensity,
     sec: waveTime
-  }))
+  }), {qos: 1})
   setTimeout(async () => {
     try {
       await fs.unlink(config.audio.target)
@@ -77,7 +77,7 @@ const lockRelease = () => {
 }
 
 const genAndNotify = async (intensity, waveTime) => {
-  const intensityString = calculator.intensityToNumberString(intensity)
+  const intensityString = `${calculator.intensityToNumberString(intensity)}`
   const nowTime = Date.now() / 1000
 
   if(nowTime < cdWaveTime && intensity <= cdIntensity) {
